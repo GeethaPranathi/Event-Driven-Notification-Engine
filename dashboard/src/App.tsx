@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { 
   Activity, 
   BarChart3, 
   Bell, 
   Heart, 
   LayoutDashboard, 
-  Mail, 
   Shield, 
   Zap,
   Menu,
@@ -14,11 +13,8 @@ import {
   Search,
   User as UserIcon,
   ChevronRight,
-  RefreshCcw,
   CheckCircle2,
-  AlertCircle,
   Users,
-  Key,
   Database,
   Lock,
   LogOut,
@@ -36,8 +32,6 @@ import {
   CartesianGrid, 
   Tooltip, 
   ResponsiveContainer,
-  BarChart,
-  Bar,
   PieChart,
   Pie,
   Cell
@@ -149,7 +143,7 @@ const AdminHomeView = ({ onNavigate }: any) => {
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie data={data} innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
-                {data.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                {data.map((_, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
               </Pie>
               <Tooltip />
             </PieChart>
@@ -257,7 +251,7 @@ const SystemHealthView = ({ onBack }: any) => (
 
 const App = () => {
   const [activeNav, setActiveNav] = useState('dashboard');
-  const [adminSubView, setAdminSubView] = useState('home'); // home, access_logs, system_health
+  const [adminSubView, setAdminSubView] = useState('home'); 
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [notifications, setNotifications] = useState(RECENT_NOTIFICATIONS);
 
@@ -354,7 +348,6 @@ const App = () => {
               {adminSubView === 'system_health' && <SystemHealthView onBack={() => setAdminSubView('home')} />}
             </motion.div>
           )}
-          {/* Compliance and Settings can be added similarly */}
         </AnimatePresence>
       </main>
     </div>
