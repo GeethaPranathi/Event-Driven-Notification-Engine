@@ -241,7 +241,7 @@ const SettingsView = () => (
       <div>
         <h4 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><AlertCircle size={18} /> Threshold Alerts</h4>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', background: 'var(--accent-soft)', borderRadius: '1rem' }}>
-          <span>Notify on 5xx Error Spike (>5%)</span>
+          <span>Notify on 5xx Error Spike (&gt;5%)</span>
           <div style={{ width: '40px', height: '22px', background: 'var(--accent-pink)', borderRadius: '20px', position: 'relative' }}>
             <div style={{ width: '18px', height: '18px', background: 'white', borderRadius: '50%', position: 'absolute', right: '2px', top: '2px' }} />
           </div>
