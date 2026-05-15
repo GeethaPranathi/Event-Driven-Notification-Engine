@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String            @id @default(uuid())
+  email                 String            @unique
+  phone                 String            @unique
+  name                  String
+  language              String            @default("en")
+  timezone              String            @default("Asia/Kolkata")
+  dndStatus             String            @default("NOT_REGISTERED")
+  preferences           UserPreference[]
+  notifications         Notification[]
+  consentRecords        ConsentRecord[]
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+}
+
+model UserPreference {
+  id                  String   @id @default(uuid())
+  userId              String
+  user                User     @relation(fields: [userId], references: [id])
+  eventCategory       String   // e.g., 'TXNX', 'RISK', 'SIPX', 'MKTX', 'REGX'
+  eventType           String?  // NULL means all events in category
+  channel             String   // 'sms', 'email', 'push', 'whatsapp', 'in_app'
+  enabled             Boolean  @default(true)
+  quietHoursOverride  Boolean  @default(false)
+  digestMode          String   @default("immediate")
+  
+  @@unique([userId, eventCategory, eventType, channel])
+}
+
+model Notification {
+  id                  String   @id @default(uuid())
+  eventType           String
+  eventId             String   // external event reference
+  userId              String
+  user                User     @relation(fields: [userId], references: [id])
+  channel             String
+  priority            Int      @default(5) // 1=CRITICAL, 5=LOW
+  status              String   @default("CREATED")
+  templateId          String
+  personalizationData Json
+  renderedContent     Json?
+  provider            String?
+  externalId          String?
+  deliveryAttempts    Int      @default(0)
+  deliveredAt         DateTime?
+  readAt              DateTime?
+  failedReason        String?
+  costPaisa           Int?
+  stateHistory        NotificationStateLog[]
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+
+  @@index([userId, status, channel])
+}
+
+model NotificationStateLog {
+  id              Int          @id @default(autoincrement())
+  notificationId  String
+  notification    Notification @relation(fields: [notificationId], references: [id])
+  fromStatus      String?
+  toStatus        String
+  actor           String
+  metadata        Json?
+  createdAt       DateTime     @default(now())
+
+  @@index([notificationId])
+  @@index([createdAt])
+}
+
+model DeadLetterQueue {
+  id              String   @id @default(uuid())
+  notificationId  String
+  originalEvent   Json
+  failureReason   String
+  retryCount      Int
+  lastError       String?
+  resolved        Boolean  @default(false)
+  resolvedBy      String?
+  resolvedAt      DateTime?
+  createdAt       DateTime @default(now())
+}
+
+model ConsentRecord {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  consentType     String   // e.g., 'PROMOTIONAL'
+  status          String   // 'OPT_IN', 'OPT_OUT'
+  ipAddress       String?
+  userAgent       String?
+  timestamp       DateTime @default(now())
+}

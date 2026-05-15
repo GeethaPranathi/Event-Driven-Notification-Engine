@@ -1,0 +1,171 @@
+version: "1.0"
+categories:
+  - name: Transaction Events
+    code: TXNX
+    events:
+      - code: TXNX-001
+        name: Buy Order Executed
+        urgency: HIGH
+        regulatory: SEBI Mandatory
+        channels: [SMS, Push, Email]
+        latency: "< 30s"
+      - code: TXNX-002
+        name: Sell Order Executed
+        urgency: HIGH
+        regulatory: SEBI Mandatory
+        channels: [SMS, Push, Email]
+        latency: "< 30s"
+      - code: TXNX-003
+        name: Order Rejected
+        urgency: HIGH
+        regulatory: Required
+        channels: [Push, SMS]
+        latency: "< 15s"
+      - code: TXNX-004
+        name: Dividend Credited
+        urgency: MEDIUM
+        regulatory: Informational
+        channels: [Email, Push]
+        latency: "< 1h"
+      - code: TXNX-005
+        name: Funds Deposited
+        urgency: HIGH
+        regulatory: Banking Reg
+        channels: [SMS, Push]
+        latency: "< 60s"
+
+  - name: Risk & Margin Events
+    code: RISK
+    events:
+      - code: RISK-001
+        name: Margin Call Warning
+        urgency: CRITICAL
+        regulatory: SEBI Mandatory
+        channels: [SMS, Push, Call]
+        latency: "< 10s"
+      - code: RISK-002
+        name: Margin Shortfall
+        urgency: CRITICAL
+        regulatory: SEBI Mandatory
+        channels: [SMS, Push, Email, Call]
+        latency: "< 5s"
+      - code: RISK-003
+        name: Position Squared Off
+        urgency: CRITICAL
+        regulatory: SEBI Mandatory
+        channels: [SMS, Push, Email]
+        latency: "< 15s"
+      - code: RISK-004
+        name: Portfolio Risk Alert
+        urgency: HIGH
+        regulatory: Advisory
+        channels: [Push, Email]
+        latency: "< 5m"
+      - code: RISK-005
+        name: Concentration Alert
+        urgency: MEDIUM
+        regulatory: Advisory
+        channels: [Email, In-App]
+        latency: "< 1h"
+
+  - name: SIP & Investment Events
+    code: SIPX
+    events:
+      - code: SIPX-001
+        name: SIP Due Reminder
+        urgency: MEDIUM
+        regulatory: Best Practice
+        channels: [Push, WhatsApp]
+        latency: "T-3 days"
+      - code: SIPX-002
+        name: SIP Executed
+        urgency: HIGH
+        regulatory: AMFI Required
+        channels: [SMS, Email]
+        latency: "< 2h"
+      - code: SIPX-003
+        name: SIP Failed
+        urgency: HIGH
+        regulatory: Required
+        channels: [SMS, Push, Email]
+        latency: "< 30m"
+      - code: SIPX-004
+        name: SIP Step-Up Reminder
+        urgency: LOW
+        regulatory: Advisory
+        channels: [Email, In-App]
+        latency: "Annual"
+      - code: SIPX-005
+        name: Goal Milestone Reached
+        urgency: LOW
+        regulatory: Engagement
+        channels: [Push, In-App]
+        latency: "< 4h"
+
+  - name: Market & Price Events
+    code: MKTX
+    events:
+      - code: MKTX-001
+        name: Price Alert Triggered
+        urgency: HIGH
+        regulatory: User-Set
+        channels: [Push, SMS]
+        latency: "< 15s"
+      - code: MKTX-002
+        name: Circuit Breaker Hit
+        urgency: CRITICAL
+        regulatory: Exchange Mandate
+        channels: [Push, SMS]
+        latency: "< 10s"
+      - code: MKTX-003
+        name: Market Open/Close
+        urgency: LOW
+        regulatory: Engagement
+        channels: [Push]
+        latency: "At event time"
+      - code: MKTX-004
+        name: 52-Week High/Low
+        urgency: MEDIUM
+        regulatory: Advisory
+        channels: [Push, Email]
+        latency: "< 30m"
+      - code: MKTX-005
+        name: Earnings Announcement
+        urgency: MEDIUM
+        regulatory: Advisory
+        channels: [Email, In-App]
+        latency: "T-1 day"
+
+  - name: Regulatory & Compliance Events
+    code: REGX
+    events:
+      - code: REGX-001
+        name: KYC Expiry Warning
+        urgency: HIGH
+        regulatory: SEBI Mandatory
+        channels: [SMS, Email, Push]
+        latency: "T-30, T-15, T-7 days"
+      - code: REGX-002
+        name: Nominee Update Reminder
+        urgency: MEDIUM
+        regulatory: SEBI Circular
+        channels: [Email, Push]
+        latency: "Quarterly"
+      - code: REGX-003
+        name: Contract Note Generated
+        urgency: HIGH
+        regulatory: SEBI Mandatory
+        channels: [Email]
+        latency: "T+1 EOD"
+      - code: REGX-004
+        name: Tax Statement Available
+        urgency: MEDIUM
+        regulatory: IT Act Required
+        channels: [Email, In-App]
+        latency: "Quarterly"
+      - code: REGX-005
+        name: Regulatory Policy Change
+        urgency: LOW
+        regulatory: Informational
+        channels: [Email]
+        latency: "< 24h"
