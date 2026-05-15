@@ -22,7 +22,10 @@ import {
   Server,
   Cpu,
   HardDrive,
-  Globe
+  Globe,
+  AlertCircle,
+  FileText,
+  Sliders
 } from 'lucide-react';
 import { 
   AreaChart, 
@@ -34,7 +37,9 @@ import {
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell
+  Cell,
+  BarChart,
+  Bar
 } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -150,20 +155,12 @@ const AdminHomeView = ({ onNavigate }: any) => {
           </ResponsiveContainer>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1rem' }}>
-          <button 
-            onClick={() => onNavigate('access_logs')}
-            className="nav-link" 
-            style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem', background: 'var(--accent-soft)', borderRadius: '0.75rem', border: 'none' }}
-          >
+          <button onClick={() => onNavigate('access_logs')} className="nav-link" style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem', background: 'var(--accent-soft)', borderRadius: '0.75rem', border: 'none' }}>
             <Lock size={16} color="var(--accent-pink)" />
             <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Access Logs</span>
             <ChevronRight size={14} style={{ marginLeft: 'auto' }} />
           </button>
-          <button 
-            onClick={() => onNavigate('system_health')}
-            className="nav-link" 
-            style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem', background: 'var(--accent-soft)', borderRadius: '0.75rem', border: 'none' }}
-          >
+          <button onClick={() => onNavigate('system_health')} className="nav-link" style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem', background: 'var(--accent-soft)', borderRadius: '0.75rem', border: 'none' }}>
             <Database size={16} color="var(--accent-pink)" />
             <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>System Health</span>
             <ChevronRight size={14} style={{ marginLeft: 'auto' }} />
@@ -173,6 +170,86 @@ const AdminHomeView = ({ onNavigate }: any) => {
     </div>
   );
 };
+
+const AnalyticsView = () => (
+  <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="glass-panel">
+    <h2 style={{ marginBottom: '1.5rem', fontWeight: 800 }}>Performance Analytics</h2>
+    <div className="stats-grid">
+      <div className="glass-panel" style={{ background: '#fdf2f8' }}>
+        <p className="label">Delivery Success</p>
+        <p className="value" style={{ fontSize: '1.5rem', color: '#10b981' }}>99.9%</p>
+      </div>
+      <div className="glass-panel" style={{ background: '#fdf2f8' }}>
+        <p className="label">Avg Process Time</p>
+        <p className="value" style={{ fontSize: '1.5rem' }}>142ms</p>
+      </div>
+    </div>
+    <div style={{ height: '350px', marginTop: '2rem' }}>
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={[{day: 'Mon', req: 400}, {day: 'Tue', req: 300}, {day: 'Wed', req: 500}, {day: 'Thu', req: 450}, {day: 'Fri', req: 600}]}>
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
+          <XAxis dataKey="day" axisLine={false} tickLine={false} />
+          <Tooltip cursor={{fill: 'var(--accent-soft)'}} />
+          <Bar dataKey="req" fill="var(--accent-pink)" radius={[6, 6, 0, 0]} />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  </motion.div>
+);
+
+const ComplianceView = () => (
+  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="glass-panel">
+    <h2 style={{ marginBottom: '2rem', fontWeight: 800 }}>Compliance & Safety</h2>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      {[
+        { title: 'DND Registry Check', desc: 'Auto-syncing with national DND databases', status: 'Active', icon: <CheckCircle2 color="#10b981" /> },
+        { title: 'Frequency Capping', desc: 'Enforcing 3-promo-per-day policy', status: 'Running', icon: <Activity color="var(--accent-pink)" /> },
+        { title: 'Data Encryption', desc: 'AES-256 for all PII data at rest', status: 'Verified', icon: <Shield color="var(--accent-pink)" /> },
+        { title: 'Audit Logs', desc: 'Immutable transaction trails enabled', status: 'Logging', icon: <FileText color="var(--accent-pink)" /> },
+      ].map((c, i) => (
+        <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '1.25rem', border: '1px solid var(--border-color)', borderRadius: '1rem', background: 'white' }}>
+          <div style={{ display: 'flex', gap: '1rem' }}>
+            <div style={{ padding: '0.75rem', background: 'var(--accent-soft)', borderRadius: '12px' }}>{c.icon}</div>
+            <div>
+              <p style={{ fontWeight: 700 }}>{c.title}</p>
+              <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>{c.desc}</p>
+            </div>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <span className="badge badge-pink" style={{ background: c.status === 'Active' ? '#d1fae5' : 'var(--accent-soft)', color: c.status === 'Active' ? '#065f46' : 'var(--accent-pink)' }}>{c.status}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </motion.div>
+);
+
+const SettingsView = () => (
+  <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} className="glass-panel">
+    <h2 style={{ marginBottom: '2rem', fontWeight: 800 }}>System Configuration</h2>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      <div>
+        <h4 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Sliders size={18} /> API Endpoints</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          <input type="text" value="https://api.wealthbridge.io/v1/notify" readOnly style={{ padding: '0.75rem', borderRadius: '0.75rem', border: '1px solid var(--border-color)', background: '#f8fafc', fontSize: '0.875rem' }} />
+          <div style={{ display: 'flex', gap: '0.75rem' }}>
+            <button className="badge badge-pink" style={{ padding: '0.5rem 1rem' }}>Regenerate Key</button>
+            <button className="badge badge-pink" style={{ padding: '0.5rem 1rem', background: 'var(--text-main)', color: 'white' }}>Revoke All</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h4 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><AlertCircle size={18} /> Threshold Alerts</h4>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', background: 'var(--accent-soft)', borderRadius: '1rem' }}>
+          <span>Notify on 5xx Error Spike (>5%)</span>
+          <div style={{ width: '40px', height: '22px', background: 'var(--accent-pink)', borderRadius: '20px', position: 'relative' }}>
+            <div style={{ width: '18px', height: '18px', background: 'white', borderRadius: '50%', position: 'absolute', right: '2px', top: '2px' }} />
+          </div>
+        </div>
+      </div>
+    </div>
+  </motion.div>
+);
 
 const AccessLogsView = ({ onBack }: any) => (
   <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
@@ -194,14 +271,11 @@ const AccessLogsView = ({ onBack }: any) => (
             { time: '2026-05-15 13:24:10', user: 'System Root', action: 'Login Success', ip: '192.168.1.1' },
             { time: '2026-05-15 13:20:05', user: 'Zetheta Dev', action: 'API Key Rotate', ip: '10.0.4.12' },
             { time: '2026-05-15 12:45:33', user: 'Intern-01', action: 'View Analytics', ip: '172.16.0.5' },
-            { time: '2026-05-15 11:30:12', user: 'System Root', action: 'Config Update', ip: '192.168.1.1' },
           ].map((log, i) => (
             <tr key={i} style={{ borderBottom: '1px solid var(--border-color)' }}>
               <td style={{ padding: '1rem', fontSize: '0.875rem', color: 'var(--text-muted)' }}>{log.time}</td>
               <td style={{ padding: '1rem', fontSize: '0.875rem', fontWeight: 600 }}>{log.user}</td>
-              <td style={{ padding: '1rem', fontSize: '0.875rem' }}>
-                <span className="badge badge-pink">{log.action}</span>
-              </td>
+              <td style={{ padding: '1rem', fontSize: '0.875rem' }}><span className="badge badge-pink">{log.action}</span></td>
               <td style={{ padding: '1rem', fontSize: '0.875rem', color: 'var(--text-muted)' }}>{log.ip}</td>
             </tr>
           ))}
@@ -255,27 +329,13 @@ const App = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [notifications, setNotifications] = useState(RECENT_NOTIFICATIONS);
 
-  const navigateToAdminSub = (view: string) => {
-    setActiveNav('admin');
-    setAdminSubView(view);
-  };
-
   return (
     <div className="layout">
-      {/* Sidebar */}
-      <motion.aside 
-        className="sidebar"
-        initial={false}
-        animate={{ width: isSidebarOpen ? 260 : 0, opacity: isSidebarOpen ? 1 : 0 }}
-        style={{ overflow: 'hidden' }}
-      >
+      <motion.aside className="sidebar" initial={false} animate={{ width: isSidebarOpen ? 260 : 0, opacity: isSidebarOpen ? 1 : 0 }} style={{ overflow: 'hidden' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '3rem' }}>
-          <div style={{ width: '40px', height: '40px', background: 'var(--accent-pink)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Zap size={24} color="white" fill="white" />
-          </div>
+          <div style={{ width: '40px', height: '40px', background: 'var(--accent-pink)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Zap size={24} color="white" fill="white" /></div>
           <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--accent-pink)' }}>WealthBridge</span>
         </div>
-
         <nav style={{ flex: 1 }}>
           {[
             { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={20} /> },
@@ -284,70 +344,41 @@ const App = () => {
             { id: 'compliance', label: 'Compliance', icon: <Shield size={20} /> },
             { id: 'settings', label: 'Settings', icon: <SettingsIcon size={20} /> },
           ].map(item => (
-            <button 
-              key={item.id} 
-              onClick={() => { setActiveNav(item.id); setAdminSubView('home'); }} 
-              className={`nav-link ${activeNav === item.id ? 'active' : ''}`} 
-              style={{ width: '100%', textAlign: 'left' }}
-            >
+            <button key={item.id} onClick={() => { setActiveNav(item.id); setAdminSubView('home'); }} className={`nav-link ${activeNav === item.id ? 'active' : ''}`} style={{ width: '100%', textAlign: 'left' }}>
               {item.icon} {item.label}
             </button>
           ))}
         </nav>
-
         <div className="glass-panel" style={{ padding: '1.25rem', marginTop: 'auto', background: 'var(--accent-soft)', border: 'none' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-            <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.05)' }}>
-              <UserIcon size={22} color="var(--accent-pink)" />
-            </div>
-            <div>
-              <p style={{ fontSize: '0.9rem', fontWeight: 800 }}>Master Admin</p>
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Super Administrator</p>
-            </div>
+            <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.05)' }}><UserIcon size={22} color="var(--accent-pink)" /></div>
+            <div><p style={{ fontSize: '0.9rem', fontWeight: 800 }}>Master Admin</p><p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Super Administrator</p></div>
           </div>
-          <button style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent-rose)', fontSize: '0.875rem', fontWeight: 700, padding: '0.5rem', borderRadius: '0.5rem', transition: 'background 0.2s' }}>
-            <LogOut size={16} /> Logout
-          </button>
+          <button style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent-rose)', fontSize: '0.875rem', fontWeight: 700, padding: '0.5rem', borderRadius: '0.5rem' }}><LogOut size={16} /> Logout</button>
         </div>
       </motion.aside>
 
-      {/* Main Content */}
       <main className="main-content">
         <header className="header">
-          <div>
-            <h1 style={{ fontSize: '2.25rem', fontWeight: 800 }}>
-              {activeNav === 'admin' ? 'Admin Control' : 'System Overview'}
-            </h1>
-            <p style={{ color: 'var(--text-muted)' }}>Welcome back, Master Admin. Everything is looking good.</p>
-          </div>
-          
+          <div><h1 style={{ fontSize: '2.25rem', fontWeight: 800 }}>{activeNav.charAt(0).toUpperCase() + activeNav.slice(1).replace('_', ' ')}</h1><p style={{ color: 'var(--text-muted)' }}>Welcome back, Master Admin. Everything is looking good.</p></div>
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <div className="glass-panel" style={{ padding: '0.5rem 1rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <Search size={18} color="var(--text-muted)" />
-              <input type="text" placeholder="Search system..." style={{ border: 'none', background: 'transparent', outline: 'none', color: 'var(--text-main)', width: '140px' }} />
-            </div>
-            <button onClick={() => setSidebarOpen(!isSidebarOpen)} className="glass-panel" style={{ padding: '0.5rem', borderRadius: '50%', width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {isSidebarOpen ? <X size={20} color="var(--accent-pink)" /> : <Menu size={20} color="var(--accent-pink)" />}
-            </button>
+            <div className="glass-panel" style={{ padding: '0.5rem 1rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}><Search size={18} color="var(--text-muted)" /><input type="text" placeholder="Search system..." style={{ border: 'none', background: 'transparent', outline: 'none', color: 'var(--text-main)', width: '140px' }} /></div>
+            <button onClick={() => setSidebarOpen(!isSidebarOpen)} className="glass-panel" style={{ padding: '0.5rem', borderRadius: '50%', width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{isSidebarOpen ? <X size={20} color="var(--accent-pink)" /> : <Menu size={20} color="var(--accent-pink)" />}</button>
           </div>
         </header>
 
         <AnimatePresence mode="wait">
-          {activeNav === 'dashboard' && (
-            <DashboardView 
-              stats={STATS} 
-              chartData={CHART_DATA} 
-              notifications={notifications} 
-              onClear={(id: number) => setNotifications(n => n.filter(x => x.id !== id))} 
-            />
-          )}
+          {activeNav === 'dashboard' && <DashboardView stats={STATS} chartData={CHART_DATA} notifications={notifications} onClear={(id: number) => setNotifications(n => n.filter(x => x.id !== id))} />}
           {activeNav === 'admin' && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass-panel">
-              {adminSubView === 'home' && <AdminHomeView onNavigate={navigateToAdminSub} />}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="glass-panel">
+              {adminSubView === 'home' && <AdminHomeView onNavigate={(v: string) => setAdminSubView(v)} />}
               {adminSubView === 'access_logs' && <AccessLogsView onBack={() => setAdminSubView('home')} />}
               {adminSubView === 'system_health' && <SystemHealthView onBack={() => setAdminSubView('home')} />}
             </motion.div>
           )}
+          {activeNav === 'analytics' && <AnalyticsView />}
+          {activeNav === 'compliance' && <ComplianceView />}
+          {activeNav === 'settings' && <SettingsView />}
         </AnimatePresence>
       </main>
     </div>
